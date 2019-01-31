@@ -105,7 +105,7 @@ void copy_and_replace2(char *srcfname, char* desname){
 	fclose(destfile);
 }
 
-void copy(char *srcfname, char* desname){
+void fcopy(char *srcfname, char* desname){
 	FILE *src = fopen(srcfname, "r");
 	FILE *dest = fopen(desname, "w");
 	int c;
@@ -116,7 +116,7 @@ void copy(char *srcfname, char* desname){
 	fclose(dest);
 }
 
-int main(int argc, char*argv[]){
+kmain(int argc, char*argv[]){
 	ex17();
 	copy_and_replace(argv[1], argv[2]);
 	count_spechars(argv[1]);
