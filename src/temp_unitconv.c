@@ -24,6 +24,7 @@ int main1(int argv, char*argc[]){
 			lower += step;
 		}
 	}
+    return 0;
 }
 
 float convert_temp(float f){
