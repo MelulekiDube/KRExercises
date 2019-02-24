@@ -1,13 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+                                                                                       
+#define line_length  64
 #define TABSTOPS 4
 #define MAXLINE 1000
 
 typedef char* string;
-void detab(char s[], int limit);
-void entab(char s[], int limit);
-int _get_line(char s[], int limit);
+void detab(char s[], int limit);/*ex1.20*/
+void entab(char s[], int limit);  /*ex1.21*/
+int _get_line(char s[], int limit); /*ex 1.22*/
+void fold(char s[], int n);
+void remove_comments(char filename[]); /*ex1.23*/
 
 int main(int argc, char *args[]){
     char line[MAXLINE];
@@ -81,4 +85,24 @@ void entab(char s[], int limit){
         ++index;
     }
     s[index] = '\0';
+}
+
+void fold(char s[], int n){
+
+}
+
+void remove_comments(char file_name[]){
+    FILE *file = fopen(file_name,"r+");
+    int c;
+    while((c= fgetc(file))!=EOF){
+        if(c == '/'){
+            int next_char;
+            if(next_char == '/'){
+                while((c=fgetc(file))!=EOF&&c!='\n'){
+                    next_char = fgetc(file);       
+                }
+            }
+        }
+    }
+    fclose(file);
 }
