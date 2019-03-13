@@ -2,7 +2,7 @@
 #include <string.h>
 
 float convert_temp(float F);
-
+extern int atoi(const char * s);
 int main1(int argv, char*argc[]){
 	float celc, fehr;
 	int lower, upper, step;

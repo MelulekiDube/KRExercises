@@ -5,7 +5,7 @@ void copy(char to[], char from[]);
 int getl_removeb(char line[], int maxline);
 void revese_string(char  s[], int line);
     /* when no return type int is assumed */
-eamain(){
+int eamain(){
 	int len;	/* current line length*/
 	int max;	/* maximum length seen so far*/
 	char line[MAXLINE]; /* current input line*/
@@ -89,5 +89,5 @@ void revese_string(char str[], int size){
         str[i] = str[len - i - 1];
         str[len-i-1] = temp;
     }
-
+	//{
 }

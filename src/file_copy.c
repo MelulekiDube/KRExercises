@@ -116,7 +116,7 @@ void fcopy(char *srcfname, char* desname){
 	fclose(dest);
 }
 
-kmain(int argc, char*argv[]){
+int kmain(int argc, char*argv[]){
 	ex17();
 	copy_and_replace(argv[1], argv[2]);
 	count_spechars(argv[1]);

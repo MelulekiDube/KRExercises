@@ -36,6 +36,7 @@ int _get_line(char s[], int limit){
         ++i;
     }
     s[i] = '\0';
+	return i;
 }
 
 /*This is to answer Ex1-20 of the K&R book*/
@@ -133,7 +134,6 @@ int process_fold(FILE* file, char buffer[], int buff_limit, int line_limit) {
 
 //Exercise 1-22.
 void fold(char file_name[], char save_file [], int line_limit){
-	int i, j;
 	FILE* input_file;
 	FILE* output_file;
 	
@@ -157,7 +157,6 @@ int get_file_line(FILE* file, char buffer[], int maxline){
 		//catch //
 		if(c=='/'&&((i-1>=0)&&buffer[i-1]=='/')){
 			//replace buffer[i-1] with newline char, terminate the string and return as the comment continues for rest of line
-			printf("%c", c);
 			buffer[i-1] = '\n';
 			buffer[i] ='\0';
 			while((c=fgetc(file))!=EOF&&c!='\n');
@@ -179,7 +178,6 @@ int get_file_line(FILE* file, char buffer[], int maxline){
 		}
 	}
 	if(c=='\n'){
-		printf("yes");
 		buffer[i]='\n';
 		++i;
 	}
@@ -194,10 +192,10 @@ void remove_comments(char file_name[], char save_file []){
     FILE *file = fopen(file_name,"r");
 	FILE *file_save = fopen(save_file, "w");
 	char buffer[MAXLINE];
-	int size = get_file_line(file, buffer, MAXLINE);
+	get_file_line(file, buffer, MAXLINE);
 	while(!done){
 		fprintf(file_save, "%s", buffer);
-		size = get_file_line(file, buffer, MAXLINE);
+		get_file_line(file, buffer, MAXLINE);
 	}
 	fclose(file_save);
     fclose(file);
