@@ -17,12 +17,14 @@ void remove_comments(char file_name[], char save_file []); /*ex1.23*/
 
 static bool done = false;
 
+/**
 int main(int argc, char *args[]){
 	printf("Running file_editing_tools\n");
 	char *f1 = args[1];
 	char *f2 = args[2];
     fold(f1, f2, 10);
 }
+*/
 
 int _get_line(char s[], int limit){
     int i, c;

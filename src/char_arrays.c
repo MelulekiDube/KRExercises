@@ -89,4 +89,5 @@ void revese_string(char str[], int size){
         str[i] = str[len - i - 1];
         str[len-i-1] = temp;
     }
+
 }
