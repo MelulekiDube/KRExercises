@@ -98,7 +98,7 @@ void process_file(FILE* file){
 	if(head){
 		perror("Errors:\n");
 		while(head){
-				fprintf(stderr,"The char %c on line number %d is not closed",head->c, head->line_number);
+				fprintf(stderr,"The char \'%c\' on line number %d is not closed.\n",head->c, head->line_number);
 				head = head->next;
 		}
 	}else{
