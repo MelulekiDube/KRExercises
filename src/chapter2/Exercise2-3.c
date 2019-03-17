@@ -3,13 +3,14 @@ Exercise 2·3
 */
 #include <stdlib.h>
 #include <stdio.h>
+
 /*checks if the given character is part of the characters that make up the hex digits*/
-int is_hex_digit(char c){
+int is_hex_digit(const char c){
 	return (c>='0'&&c<='9') || (c>='a'&&c<='f') || (c>='A'&&c<='F');
 }
 
 /*converts hex digit char into the equivalent int*/
-int  ctoi(char c){
+int  ctoi(const char c){
 	if((c>='0'&&c<='9'))
 		return c-'0';
 	else if((c>='a'&&c<='f') )
@@ -33,8 +34,7 @@ int htoi(const char s[]){
 	
 	//loop through the character producing the represented number
 	while(is_hex_digit(s[i])){
-		num = (16*num)+(ctoi(s[i]));
-		++i;
+		num = (16*num)+(ctoi(s[i++]));
 	}
 	//return the answer
 	return num;
