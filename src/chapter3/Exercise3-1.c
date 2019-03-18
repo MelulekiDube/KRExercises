@@ -76,5 +76,4 @@ int main(void){
 		avg_time_taken += ((double)t)/CLOCKS_PER_SEC;
 	}
     printf("binsearch() took %f seconds to execute \n", avg_time_taken);
-	
 }

@@ -6,9 +6,9 @@ Answer: to the first part of the question
 
 If we had any number, subtracting 1 from it, will result in the right most bit being changed the value to zero example:
 			       x  x is the rightmost 1-bit. 
-			 10101010     
+			 10101010     111111111
 			-       1
-			 10101001 
+			 10101000
 This is because the rightmost 1-bit in the x bit will be the first real bit that wll be able to subtract 1 without requiring a borrow. Hence this bit will be a 0. 
 
 The bits before this will be a 1 and those after this bit will be a as they where.
