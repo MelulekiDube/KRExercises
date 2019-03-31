@@ -54,7 +54,7 @@ Full descriptions are in Appendix B*/
 *			t: the pointer to the string we are copying to s
 *			n: the number of characters we are copying from t to s
 */
-void strncpy_md(char* s, char *t, int n){
+void strncpy_md(char *s, char *t, int n){
 	int i =0;
 	while((*s++=*t++)&&++i<n);
 	*s= '\0';

@@ -24,7 +24,7 @@ char out [1000] ; /* output string */
 	List of that will hold the variables
 */
 typedef struct lnode {
-	struct lnode * next;
+	struct lnode *next;
 	char *data;
 }lnode;
 
@@ -71,7 +71,7 @@ void swap(char *s, char* t){
 	strcpy(t, temp);
 }
 
-void add_node(lnode* h, char *s, int n){
+void add_node(lnode *h, char *s, int n){
 	lnode *temp = h, *prev=NULL;
 		while(temp){
 			if(strcmp(s, h->data)<=0){
@@ -119,7 +119,7 @@ void treeprint(tnode *r){
 	}
 }
 
-int binsearch(char* x, char *v[], int n){
+int binsearch(char *x, char *v[], int n){
 	int low, mid, high;
 	low = 0;
 	high= n-1;
@@ -150,16 +150,15 @@ int binsearch(char* x, char *v[], int n){
 11. typeSpecifier → returnTypeSpecifier | RECTYPE
 12. returnTypeSpecifier → int | bool | char
 */
-void ignore_whitespace(FILE* f){
+void ignore_whitespace(FILE *f){
 	int c;
 	while((c=fgetc(f))==' '|| c == '\t' || c=='\n')
 		;
 	ungetc(c, f);
 }
 
-int get_word(FILE* f, char *word){
+int get_word(FILE *f, char *word){
 	int c;
-	void ungetch(int, FILE*);
 	/*Handling comments*/
 	ignore_whitespace(f);
 	if((c=fgetc(f))=='/'){
@@ -185,7 +184,7 @@ int get_word(FILE* f, char *word){
 	*word = '\0';
 	return 1;
 }
-int gettoken(FILE* f) {/* return next token */
+int gettoken(FILE *f) {/* return next token */
 	int status = get_word(f, name);
 	if(!status){
 		return EOF;
@@ -197,20 +196,19 @@ int gettoken(FILE* f) {/* return next token */
 	return tokentype = status;
 }
 
-int func_definations(FILE* f, int n){
+int func_definations(FILE *f, int n){
 	int c;
 	int varDeclList(FILE*, int);
-	if((c=fgetc(f))!=',');
+	if((c=fgetc(f))!=',')
 		ungetc(c, f);
 	while(gettoken(f)==SPECIFIER){
 		tokentype = FUN_DCL;
 		if((c=varDeclList(f, n))==')')
 			break;
-		
 	}
 }
 
-int varDeclList(FILE* f, int n){
+int varDeclList(FILE *f, int n){
 	int c;
 	char *p = token;
 	ignore_whitespace(f);
@@ -221,7 +219,8 @@ int varDeclList(FILE* f, int n){
 		*p='\0';
 		ignore_whitespace(f);
 		if(c!='(')
-			root = add_tree(root, token, n);
+			if(binsearch(token, types, TYPE_SIZE)<0)
+				root = add_tree(root, token, n);
 		if(c==','&&tokentype!=FUN_DCL)
 			varDeclList(f, n);
 		if(c=='(')
