@@ -8,10 +8,10 @@
 
 #define md_alloc(type) ((type*)malloc(sizeof(type)))
 #define KEY_WORD_SIZE 20
-#define TYPE_SIZE 10
+#define TYPE_SIZE 11
 
-enum { NAME=1, SPECIFIER, BRACKETS, COMMENTS, INCLUDE};
-char *types[] = {"auto",  "char", "double",  "float", "int", "long", "register", "short", "signed", "unsigned"};
+enum { NAME=1, SPECIFIER, BRACKETS, COMMENTS, INCLUDE, FUN_DCL};
+char *types[] = {"auto",  "char", "double",  "float", "int", "long", "register", "short", "signed", "unsigned", "void"};
 
 int tokentype; /* type of last token */
 char token[MAXTOKEN]; /* last token string */
@@ -64,11 +64,19 @@ char *strdup_md(char *s){
 		strcpy(p, s);
 	return p;
 }
+void swap(char *s, char* t){
+	char temp[strlen(s)];
+	strcpy(temp, s);
+	strcpy(s, t);
+	strcpy(t, temp);
+}
 
 void add_node(lnode* h, char *s, int n){
 	lnode *temp = h, *prev=NULL;
 		while(temp){
-			
+			if(strcmp(s, h->data)<=0){
+				swap(s, h->data);
+			}
 			prev = temp;
 			temp = temp->next;
 		}
@@ -141,7 +149,6 @@ int binsearch(char* x, char *v[], int n){
 10. scopedTypeSpecifier → static typeSpecifier | typeSpecifier
 11. typeSpecifier → returnTypeSpecifier | RECTYPE
 12. returnTypeSpecifier → int | bool | char
-
 */
 void ignore_whitespace(FILE* f){
 	int c;
@@ -179,33 +186,50 @@ int get_word(FILE* f, char *word){
 	return 1;
 }
 int gettoken(FILE* f) {/* return next token */
-	char word[MAXTOKEN];
-	int status = get_word(f, word);
+	int status = get_word(f, name);
 	if(!status){
 		return EOF;
 	}
 	int index;
-	if((index= binsearch(word, types, TYPE_SIZE))>=0){
+	if((index= binsearch(name, types, TYPE_SIZE))>=0){
 		return tokentype = SPECIFIER;
 	}
-	return status;
+	return tokentype = status;
+}
+
+int func_definations(FILE* f, int n){
+	int c;
+	int varDeclList(FILE*, int);
+	if((c=fgetc(f))!=',');
+		ungetc(c, f);
+	while(gettoken(f)==SPECIFIER){
+		tokentype = FUN_DCL;
+		if((c=varDeclList(f, n))==')')
+			break;
+		
+	}
 }
 
 int varDeclList(FILE* f, int n){
-	
 	int c;
 	char *p = token;
 	ignore_whitespace(f);
 	while((c=fgetc(f))=='*');
-	if(isalpha(c)){
-		for(*p++=c; isalnum(c=fgetc(f));)
+	if(isalpha(c)||c=='_'){
+		for(*p++=c; isalnum(c=fgetc(f))||c=='_';)
 			*p++ = c;
 		*p='\0';
 		ignore_whitespace(f);
 		if(c!='(')
 			root = add_tree(root, token, n);
-		ungetc(c, f);
+		if(c==','&&tokentype!=FUN_DCL)
+			varDeclList(f, n);
+		if(c=='(')
+			func_definations(f, n);
+		if(tokentype!=FUN_DCL)
+			ungetc(c, f);
 	}
+	return c;
 }
 
 int main(int argc, char *argv[]){
@@ -214,9 +238,8 @@ int main(int argc, char *argv[]){
 	if(argc > 2)
 		size = atoi(argv[2]);
 	FILE* f= fopen(argv[1], "r");
-	int type;
-	while ((type =gettoken (f)) != EOF) {/* 1st token on line */
-		if(type==SPECIFIER){
+	while ((tokentype =gettoken (f)) != EOF) {/* 1st token on line */
+		if(tokentype==SPECIFIER){
 			varDeclList(f, size);
 		}
 	}
