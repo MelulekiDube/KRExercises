@@ -9,26 +9,23 @@
 typedef struct tnode* tnode_ptr;
 typedef struct lnode * lnode_ptr;
 
-tnode_ptr root;
+lnode_ptr head;
 void parse_file(char *);
+void sort_list(lnode_ptr);
+void listprint(lnode_ptr h);
 char *strdup_md(char *);
-void treeprint(tnode_ptr);
-tnode_ptr addtree(tnode_ptr, char*, int);
+void addlist(lnode_ptr, char*);
 
 typedef struct lnode{
-	int line_number;
+	int counter;
+	char *word;
 	lnode_ptr next;
 }lnode;
 
-typedef struct tnode{
-	char *word;
-	lnode_ptr line_numbers;
-	tnode_ptr left, right;
-}tnode;
 
 int main(int argc, char *argv[]){
 	char *filename = argv[1];
-	root = NULL;
+	head = NULL;
 	parse_file(filename);
 }
 
@@ -39,71 +36,84 @@ void parse_file(char * filename){
 	char *p = word;
 	
 	f = fopen(filename, "r");
-	int line = 1;
 	while((c=fgetc(f))!=EOF){
 		if(c == ' '||c=='\n'||c=='\t'){
 			*p++ = '\0';
-			if(p!=word)
-				root = addtree(root, word, line);
-			if(c=='\n')
-				++line;
+			addlist(head, word);
 			p = word;
 		}else{
 			*p++ = c;
 		}
 	}
-	//printf("Printing the details:\n");
-	treeprint(root);
+	sort_list(head);
+	listprint(head);
 }	
 
-void addlist(lnode_ptr h, int ln){
-	lnode_ptr prev; 
-	while(h){
-		prev= h;
-		h=h->next;
-	}
-	prev->next = alloc(lnode, 1);
-	prev->next->line_number = ln;
-	prev->next->next = NULL;
+lnode_ptr create_node(char *s){
+	lnode_ptr temp = alloc(lnode, 1);
+	temp->counter = 1;
+	temp->word = strdup_md(s);
+	temp->next = NULL;
+	return temp;
 }
 
-tnode_ptr addtree(tnode_ptr r, char *s, int line_number){
-	int cond;
-	if(r==NULL){
-		r = alloc(tnode, 1);
-		r->word = strdup(s);
-		r->left = r->right=NULL;
-		r->line_numbers = alloc(lnode, 1);
-		r->line_numbers->next = NULL;
-		r->line_numbers->line_number = line_number;
-	}else if((cond=strcmp(s, r->word))==0){
-		addlist(r->line_numbers, line_number);
-	}else if (cond < 0){
-		r->left = addtree(r->left, s, line_number);
-	}else{
-		r->right = addtree(r->right, s, line_number);
+void addlist(lnode_ptr h, char* s){
+	lnode_ptr prev=NULL, curr=h;
+	while(curr){
+		if(strcmp(s, curr->word)==0){
+			++(curr->counter);
+			return;
+		}
+		prev= curr;
+		curr=curr->next;
 	}
-	return r;
+	if(prev)
+		prev->next = create_node(s);
+	else
+		head = create_node(s);
+}
+
+void swap(lnode_ptr p1, lnode_ptr p2){
+	int temp = p1->counter;
+	char *tmp_word = strdup_md(p1->word);
+	
+	//copy p2 into p1
+	free(p1->word);
+	p1->word = strdup_md(p2->word);
+	p1->counter = p2->counter;
+	//copy temp into p2
+	free(p2->word);
+	p2->counter = temp;
+	p2->word = strdup_md(tmp_word);
+	
+	free(tmp_word);
+}
+
+void sort_list(lnode_ptr h){
+	lnode_ptr curr = h;
+	while(curr){
+		lnode_ptr max = curr, next = curr->next;
+		while(next){
+			if(max->counter < next->counter){
+				max = next;
+			}
+			next = next->next;
+		}
+		if(max!=curr)
+			swap(curr, max);
+		curr = curr->next;
+	}
 }
 
 void listprint(lnode_ptr h){
 	while(h){
-		printf("%d ", h->line_number);
+		printf("%s: %d\n", h->word, h->counter);
 		h = h->next;
-	}
-}
-void treeprint(tnode *r){
-	if(r){
-		treeprint(r->left);
-		printf("%s: ", r->word);
-		listprint(r->line_numbers);
-		printf("\n");
-		treeprint(r->right);
 	}
 }
 
 char *strdup_md(char *s){
-	char *p = alloc(char, 1);
+	char *p =alloc(char, strlen(s));
 	if(p)
 		strcpy(p, s);
 	return p;
